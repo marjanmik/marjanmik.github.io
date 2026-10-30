@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#121726">
+<title>Кубик</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Кубик">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="style.css?v=0.3.0">
+</head>
+<body class="loading">
+<div id="stage"></div>
+
+<section id="scr-menu" class="scr">
+  <div class="menu-head">
+    <h1 class="logo">Кубик</h1>
+    <p class="sub">интеллектуальная игра</p>
+  </div>
+  <div class="cube-slot"></div>
+  <div class="menu-btns">
+    <button class="btn primary" id="m-continue" hidden></button>
+    <button class="btn" id="m-new">Новая игра</button>
+    <button class="btn ghost" id="m-my"></button>
+    <button class="btn ghost" id="m-help">Как играть</button>
+    <div class="menu-foot">
+      <button class="link" id="m-sound"></button>
+      <span id="m-best"></span>
+    </div>
+  </div>
+</section>
+
+<section id="scr-levels" class="scr">
+  <header class="bar"><button class="ibtn" data-go="menu" aria-label="Назад"></button><h2>Новая игра</h2><span class="ibtn"></span></header>
+  <div class="scroll">
+    <p class="lead">С какого уровня начать? В каждом уровне 6 этапов по 9 вопросов, а в конце надо собрать кубик.</p>
+    <div id="lv-list"></div>
+  </div>
+</section>
+
+<section id="scr-topics" class="scr">
+  <header class="bar"><button class="ibtn" data-go="menu" aria-label="В меню"></button><h2 id="tp-title"></h2><span class="ibtn"></span></header>
+  <div class="scroll">
+    <p class="lead">Выбери тему для каждой грани. Грань кубика — это этап из 9 вопросов, клетка — вопрос.</p>
+    <div id="tp-list"></div>
+  </div>
+  <div class="foot two">
+    <button class="btn ghost" id="tp-rand"></button>
+    <button class="btn primary" id="tp-go">Начать уровень</button>
+  </div>
+</section>
+
+<section id="scr-game" class="scr">
+  <header class="bar"><button class="ibtn" id="g-home" aria-label="В меню"></button><h2 id="g-title"></h2><button class="ibtn" id="g-help" aria-label="Как играть"></button></header>
+  <div class="stats">
+    <div class="pill"><small>Очки</small><b id="st-score">0</b></div>
+    <div class="pill turns"><small>Повороты</small><b id="st-turns">0</b></div>
+    <div class="pill"><small id="st-l3">Вопросы</small><b id="st-3">0</b></div>
+  </div>
+  <div class="cube-slot"></div>
+  <div class="foot" id="g-foot"></div>
+</section>
+
+<section id="scr-my" class="scr">
+  <header class="bar"><button class="ibtn" id="my-back" aria-label="Назад"></button><h2>Мои вопросы</h2><span class="ibtn"></span></header>
+  <div class="scroll">
+    <p class="lead" id="my-lead"></p>
+    <div id="my-list"></div>
+  </div>
+  <div class="foot">
+    <button class="btn primary" id="my-add"></button>
+    <div class="two-sm"><button class="btn ghost" id="my-save"></button><button class="btn ghost" id="my-load"></button></div>
+    <input type="file" id="my-file" accept=".txt,.json,text/plain,application/json" hidden>
+  </div>
+</section>
+
+<div id="sheet" class="overlay" hidden><div class="card qcard" id="qcard"></div></div>
+<div id="edit" class="overlay top" hidden><div class="card" id="ecard"></div></div>
+<div id="modal" class="overlay" hidden><div class="card" id="mcard"></div></div>
+<div id="toast"></div>
+<noscript><p style="padding:24px;color:#fff">Для игры нужен JavaScript.</p></noscript>
+<script type="module" src="game.js?v=0.3.0"></script>
+</body>
+</html>
