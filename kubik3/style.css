@@ -143,6 +143,14 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .ans button.ok { background: rgba(25,179,107,.22); border-color: var(--ok); }
 .ans button.bad { background: rgba(224,64,74,.2); border-color: var(--bad); }
 .ans.done button:not(.ok):not(.bad) { opacity: .5; }
+.ans button.cut { opacity: .22; text-decoration: line-through; }
+.qhelp { display: flex; gap: 9px; margin-top: 12px; }
+.qh { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; padding: 9px 8px; border-radius: 12px; background: transparent; border: 1.5px solid #3a4560; color: var(--text); font-size: 15px; font-weight: 600; min-height: 46px; }
+.qh .ic { width: 20px; height: 20px; }
+.qh small { color: var(--muted); font-weight: 500; font-size: 12px; width: 100%; text-align: center; margin-top: -2px; }
+.qh:disabled { opacity: .38; }
+.qh.used { opacity: .38; }
+.qh.armed { border-color: var(--bad); color: var(--bad); }
 .after { margin-top: 14px; }
 .verdict { font-weight: 800; font-size: 18px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
 .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); }
@@ -214,3 +222,26 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   body::after { content: 'Поверни телефон вертикально'; position: fixed; inset: 0; z-index: 50; display: flex; align-items: center;
     justify-content: center; background: var(--bg1); color: var(--text); font-size: 20px; font-weight: 700; }
 }
+
+/* вызов другу */
+.menu-links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+.duel-menu { justify-content: center; font-size: 14px; color: var(--accent); padding: 2px 0 0; }
+.duel-menu .ic, .rep-menu .ic { width: 17px; height: 17px; }
+.m-sub { text-align: center; color: var(--muted); font-size: 14px; margin: -6px 0 10px; }
+.m-note { color: var(--muted); font-size: 14px; }
+.verd { text-align: center; font-weight: 800; font-size: 17px; margin: 2px 0 10px; color: var(--accent); }
+.duel { width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 14.5px; table-layout: fixed; }
+.duel th, .duel td { padding: 7px 3px; border-bottom: 1px solid var(--line); text-align: center; overflow-wrap: anywhere; }
+.duel th { font-weight: 800; font-size: 14.5px; }
+.duel th:first-child, .duel td:first-child { text-align: left; color: var(--muted); font-weight: 500; width: 38%; font-size: 13.5px; }
+.duel th.me { color: var(--accent); }
+.duel td.best { color: var(--ok); font-weight: 800; }
+.dtopics { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin: 0 0 12px; font-size: 14.5px; }
+.dtopics span { display: flex; align-items: center; gap: 7px; line-height: 1.2; }
+.dtopics .sw { width: 26px; height: 26px; border-radius: 7px; flex: none; display: inline-flex; align-items: center; justify-content: center; }
+.dtopics .sw .ic { width: 16px; height: 16px; }
+.dtopics small { color: var(--muted); white-space: nowrap; }
+.dl { display: block; width: 100%; text-align: left; background: var(--card2); border-radius: 12px; padding: 10px 12px; margin-bottom: 7px; color: var(--text); border: 0; font: inherit; }
+.dl b { display: block; font-size: 15px; }
+.dl small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.dlink { margin-top: 14px; }

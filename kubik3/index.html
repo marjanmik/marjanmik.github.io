@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Кубик">
 <meta name="format-detection" content="telephone=no">
-<link rel="stylesheet" href="style.css?v=0.7.0">
+<link rel="stylesheet" href="style.css?v=0.9.0">
 </head>
 <body class="loading">
 <div id="stage"></div>
@@ -27,6 +27,7 @@
   <div class="cube-slot"></div>
   <div class="menu-btns">
     <button class="btn primary" id="m-continue" hidden></button>
+    <button class="btn" id="m-chal" hidden></button>
     <button class="btn" id="m-new">Новая игра</button>
     <button class="btn ghost" id="m-my"></button>
     <button class="btn ghost" id="m-help">Как играть</button>
@@ -34,7 +35,7 @@
       <button class="link" id="m-sound"></button>
       <button class="link" id="m-update"></button>
     </div>
-    <button class="link rep-menu" id="m-reports" hidden></button>
+    <div class="menu-links"><button class="link rep-menu" id="m-reports" hidden></button><button class="link duel-menu" id="m-duels" hidden></button></div>
   </div>
 </section>
 
@@ -88,6 +89,6 @@
 <div id="modal" class="overlay" hidden><div class="card" id="mcard"></div></div>
 <div id="toast"></div>
 <noscript><p style="padding:24px;color:#fff">Для игры нужен JavaScript.</p></noscript>
-<script type="module" src="game.js?v=0.7.0"></script>
+<script type="module" src="game.js?v=0.9.0"></script>
 </body>
 </html>
