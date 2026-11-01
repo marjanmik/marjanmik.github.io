@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Кубик">
 <meta name="format-detection" content="telephone=no">
-<link rel="stylesheet" href="style.css?v=0.4.0">
+<link rel="stylesheet" href="style.css?v=0.7.0">
 </head>
 <body class="loading">
 <div id="stage"></div>
@@ -22,6 +22,7 @@
   <div class="menu-head">
     <h1 class="logo">Кубик</h1>
     <p class="sub">интеллектуальная игра</p>
+    <p class="best" id="m-best"></p>
   </div>
   <div class="cube-slot"></div>
   <div class="menu-btns">
@@ -31,15 +32,17 @@
     <button class="btn ghost" id="m-help">Как играть</button>
     <div class="menu-foot">
       <button class="link" id="m-sound"></button>
-      <span id="m-best"></span>
+      <button class="link" id="m-update"></button>
     </div>
+    <button class="link rep-menu" id="m-reports" hidden></button>
   </div>
 </section>
 
 <section id="scr-levels" class="scr">
   <header class="bar"><button class="ibtn" data-go="menu" aria-label="Назад"></button><h2>Новая игра</h2><span class="ibtn"></span></header>
   <div class="scroll">
-    <p class="lead">С какого уровня начать? В каждом уровне 6 этапов по 9 вопросов, а в конце надо собрать кубик.</p>
+    <div class="sizes" id="lv-size"></div>
+    <p class="lead" id="lv-lead"></p>
     <div id="lv-list"></div>
   </div>
 </section>
@@ -47,7 +50,7 @@
 <section id="scr-topics" class="scr">
   <header class="bar"><button class="ibtn" data-go="menu" aria-label="В меню"></button><h2 id="tp-title"></h2><span class="ibtn"></span></header>
   <div class="scroll">
-    <p class="lead">Выбери тему для каждой грани. Грань кубика — это этап из 9 вопросов, клетка — вопрос.</p>
+    <p class="lead" id="tp-lead"></p>
     <div id="tp-list"></div>
   </div>
   <div class="foot two">
@@ -85,6 +88,6 @@
 <div id="modal" class="overlay" hidden><div class="card" id="mcard"></div></div>
 <div id="toast"></div>
 <noscript><p style="padding:24px;color:#fff">Для игры нужен JavaScript.</p></noscript>
-<script type="module" src="game.js?v=0.4.0"></script>
+<script type="module" src="game.js?v=0.7.0"></script>
 </body>
 </html>
