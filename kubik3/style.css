@@ -254,3 +254,17 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .dl b { display: block; font-size: 15px; }
 .dl small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
 .dlink { margin-top: 14px; }
+/* вопросы с картинками (0.11.0) */
+.q-pic { position: relative; width: 100%; max-height: 36vh; margin: 2px 0 12px; border-radius: 14px; overflow: hidden; background: #0b1020;
+  display: flex; align-items: center; justify-content: center; cursor: zoom-in; }
+.q-pic img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.q-pic.loading img, .q-pic.fail img { visibility: hidden; }
+.q-pic .pic-msg { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 8px;
+  color: var(--muted); font-size: 15px; text-align: center; padding: 12px; }
+.q-pic.loading .pic-msg, .q-pic.fail .pic-msg { display: flex; }
+.q-pic .pic-msg .link { color: var(--text); text-decoration: underline; font-size: 15px; }
+.cr { color: var(--muted); font-size: 12.5px; margin: -6px 0 14px; word-break: break-word; }
+.cr a { color: var(--muted); text-decoration: underline; }
+.pic-zoom { position: fixed; inset: 0; z-index: 50; background: rgba(3,5,10,.94); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 12px; }
+.pic-zoom img { max-width: 100%; max-height: calc(100% - 40px); object-fit: contain; }
+.pic-zoom span { color: #9aa3b8; font-size: 14px; }
