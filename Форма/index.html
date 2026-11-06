@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Добавление вопроса — ru.json</title>
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --fg:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --ok:#22c55e; --err:#ef4444; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--fg); padding:24px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+  .card { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  label { display:block; font-size:.85rem; color:var(--muted); margin: 12px 0 6px; }
+  input[type=text], textarea, select { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #334155; background:#0b1220; color:var(--fg); font-size:.95rem; font-family: inherit; }
+  textarea { min-height: 64px; resize: vertical; }
+  .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width:600px){ .row { grid-template-columns: 1fr; } }
+  button { cursor:pointer; border:none; border-radius:8px; padding:10px 16px; font-size:.95rem; font-weight:600; }
+  .primary { background: var(--accent); color:#0b1220; }
+  .ghost { background:#334155; color:var(--fg); }
+  .actions { display:flex; gap:10px; margin-top:18px; flex-wrap: wrap; }
+  .msg { margin-top:14px; padding:10px 12px; border-radius:8px; font-size:.9rem; display:none; }
+  .msg.ok { background: rgba(34,197,94,.15); color:#86efac; display:block; }
+  .msg.err { background: rgba(239,68,68,.15); color:#fca5a5; display:block; }
+  .msg.info { background: rgba(56,189,248,.15); color:#7dd3fc; display:block; }
+  details { margin-top: 16px; }
+  summary { cursor:pointer; color: var(--accent); font-size:.9rem; }
+  pre { background:#0b1220; padding:12px; border-radius:8px; overflow:auto; font-size:.8rem; max-height:320px; }
+  .hint { color:var(--muted); font-size:.8rem; margin-top:4px; }
+  .counter { float:right; color:var(--muted); font-size:.8rem; }
+  .ans-row { display:grid; grid-template-columns: 24px 1fr; gap:8px; align-items:center; margin-bottom:6px; }
+  .ans-row input[type=radio] { transform: scale(1.2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Добавить вопрос в ru.json</h1>
+  <div class="sub">Форма проверяет дубликаты по всему файлу и скачивает обновлённый ru.json. Затем закоммитьте файл в GitHub.</div>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>Тема</label>
+        <select id="topic"></select>
+      </div>
+      <div>
+        <label>Уровень сложности</label>
+        <select id="level">
+          <option value="1">1 — простой</option>
+          <option value="2">2 — средний</option>
+          <option value="3">3 — сложный</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Вопрос <span class="counter" id="qCounter">0/200</span></label>
+    <textarea id="question" maxlength="200" placeholder="Например: В каком городе стоит Эйфелева башня?"></textarea>
+
+    <label>Варианты ответа (первый отмеченный — правильный)</label>
+    <div id="answers">
+      <div class="ans-row"><input type="radio" name="ans" value="0" checked><input type="text" class="ansInput" placeholder="Вариант 1 (правильный)" maxlength="80"></div>
+      <div class="ans-row"><input type="radio" name="ans" value="1"><input type="text" class="ansInput" placeholder="Вариант 2" maxlength="80"></div>
+      <div class="ans-row"><input type="radio" name="ans" value="2"><input type="text" class="ansInput" placeholder="Вариант 3" maxlength="80"></div>
+      <div class="ans-row"><input type="radio" name="ans" value="3"><input type="text" class="ansInput" placeholder="Вариант 4" maxlength="80"></div>
+    </div>
+    <div class="hint">Правильный вариант автоматически встанет первым в массиве <code>a</code>.</div>
+
+    <label>Пояснение (необязательно)</label>
+<textarea id="explain" placeholder="Короткое объяснение правильного ответа"></textarea>
+
+    <div class="actions">
+      <button class="primary" id="saveBtn">Сохранить и скачать ru.json</button>
+      <button class="ghost" id="checkBtn">Проверить на дубликаты</button>
+      <button class="ghost" id="reloadBtn">Перезагрузить ru.json</button>
+    </div>
+
+    <div class="msg" id="msg"></div>
+
+    <details id="previewWrap">
+      <summary>Показать новый вопрос в JSON</summary>
+      <pre id="preview"></pre>
+    </details>
+  </div>
+</div>
+
+<script>
+const FILE_URL = './ru.json';
+let currentData = null;
+
+const $ = id => document.getElementById(id);
+const msg = $('msg');
+const ansInputs = [...document.querySelectorAll('.ansInput')];
+
+function showMsg(text, type='info') {
+  msg.className = 'msg ' + type;
+  msg.textContent = text;
+}
+
+$('question').addEventListener('input', e => $('qCounter').textContent = e.target.value.length + '/200');
+
+function norm(s) {
+  return (s || '').toString().trim().toLowerCase().replace(/\s+/g, ' ').replace(/[?!.,;:]+$/,'');
+}
+
+async function loadData() {
+  try {
+    const res = await fetch(FILE_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    currentData = await res.json();
+
+    const sel = $('topic');
+    sel.innerHTML = '';
+    Object.keys(currentData).forEach(k => {
+      if (k === '_meta') return;
+      const opt = document.createElement('option');
+      opt.value = k;
+      opt.textContent = k + ' (' + Object.keys(currentData[k]).join(',') + ')';
+      sel.appendChild(opt);
+    });
+
+    let total = 0;
+    for (const k of Object.keys(currentData)) {
+      if (k === '_meta') continue;
+      for (const l of Object.keys(currentData[k])) {
+        if (Array.isArray(currentData[k][l])) total += currentData[k][l].length;
+      }
+    }
+    showMsg('ru.json загружен: ' + total + ' вопросов, тем: ' + (Object.keys(currentData).length - 1), 'ok');
+  } catch (e) {
+    currentData = null;
+    showMsg('Не удалось загрузить ru.json: ' + e.message + '. Сохранение отключено, чтобы не затереть данные.', 'err');
+    $('saveBtn').disabled = true;
+    $('checkBtn').disabled = true;
+  }
+}
+
+function buildQuestion() {
+  const q = $('question').value.trim();
+  if (!q) throw new Error('Введите вопрос');
+
+  const variants = ansInputs.map(i => i.value.trim()).filter(v => v);
+  if (variants.length < 2) throw new Error('Нужно минимум 2 варианта ответа');
+
+  const correctIdx = Number(document.querySelector('input[name="ans"]:checked').value);
+  const correct = ansInputs[correctIdx].value.trim();
+  if (!correct) throw new Error('Отмеченный правильный вариант не заполнен');
+
+  const a = [correct, ...variants.filter(v => v !== correct)];
+
+  const obj = { q, a };
+  const e = $('explain').value.trim();
+  if (e) obj.e = e;
+  return obj;
+}
+
+function findDuplicates(qText) {
+  if (!currentData) return [];
+  const n = norm(qText);
+  const found = [];
+  for (const k of Object.keys(currentData)) {
+    if (k === '_meta') continue;
+    for (const l of Object.keys(currentData[k])) {
+      const arr = currentData[k][l];
+      if (!Array.isArray(arr)) continue;
+      for (const item of arr) {
+        if (item && norm(item.q) === n) found.push({ topic: k, level: l, q: item.q });
+      }
+    }
+  }
+  return found;
+}
+
+$('checkBtn').addEventListener('click', () => {
+  const q = $('question').value.trim();
+  if (!q) return showMsg('Введите вопрос для проверки', 'err');
+  const dups = findDuplicates(q);
+  if (dups.length) {
+    showMsg('Дубликат найден: ' + dups.map(d => '[' + d.topic + '/' + d.level + '] «' + d.q + '»').join('; '), 'err');
+  } else {
+    showMsg('Дубликатов по всему файлу не найдено', 'ok');
+  }
+});
+
+$('saveBtn').addEventListener('click', () => {
+  if (!currentData) return showMsg('ru.json не загружен — сохранение отключено', 'err');
+  try {
+    const obj = buildQuestion();
+    const dups = findDuplicates(obj.q);
+    if (dups.length) {
+      const ok = confirm('Похожий вопрос уже есть:\n' + dups.map(d => '[' + d.topic + '/' + d.level + '] ' + d.q).
+join('\n') + '\n\nВсё равно добавить?');
+      if (!ok) return;
+    }
+
+    const topic = $('topic').value;
+    const level = $('level').value;
+
+    if (!currentData[topic]) currentData[topic] = {};
+    if (!Array.isArray(currentData[topic][level])) currentData[topic][level] = [];
+    currentData[topic][level].push(obj);
+
+    if (currentData._meta) {
+      let total = 0;
+      for (const k of Object.keys(currentData)) {
+        if (k === '_meta') continue;
+        for (const l of Object.keys(currentData[k])) {
+          if (Array.isArray(currentData[k][l])) total += currentData[k][l].length;
+        }
+      }
+      currentData._meta.n = total;
+      currentData._meta.date = new Date().toISOString().slice(0,10);
+    }
+
+    const json = JSON.stringify(currentData, null, 2);
+    $('preview').textContent = JSON.stringify(obj, null, 2);
+    $('previewWrap').open = true;
+
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ru.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    showMsg('Вопрос добавлен в ' + topic + '/' + level + '. Файл ru.json скачан — закоммитьте его в репозиторий.', 'ok');
+
+    $('question').value = '';
+    ansInputs.forEach(i => i.value = '');
+    $('explain').value = '';
+    $('qCounter').textContent = '0/200';
+    document.querySelector('input[name="ans"][value="0"]').checked = true;
+  } catch (e) {
+    showMsg(e.message, 'err');
+  }
+});
+
+$('reloadBtn').addEventListener('click', loadData);
+
+loadData();
+</script>
+</body>
+</html>
