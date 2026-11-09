@@ -1,432 +1,361 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex">
-<title>Кубик — добавление вопросов</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Управление вопросами — ru.json</title>
 <style>
-:root { --bg: #0e1322; --card: #1d2538; --card2: #262f46; --line: #33405e; --text: #f3f5fa; --muted: #9aa6c0;
-  --accent: #ffd21f; --ok: #19b36b; --bad: #e0404a; --warn: #f0a020; }
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.4 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  padding: 12px 12px calc(40px + env(safe-area-inset-bottom)); }
-main { max-width: 720px; margin: 0 auto; }
-h1 { font-size: 22px; margin: 6px 0 4px; }
-h2 { font-size: 18px; margin: 0 0 10px; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin: 12px 0; }
-.muted { color: var(--muted); font-size: 14px; }
-label { display: block; margin: 10px 0 4px; font-size: 14px; color: var(--muted); }
-input[type=text], textarea, select { width: 100%; font: inherit; color: var(--text); background: var(--card2);
-  border: 1.5px solid var(--line); border-radius: 10px; padding: 10px; }
-textarea { resize: vertical; }
-input.okans { border-color: var(--ok); }
-.row { display: flex; gap: 10px; flex-wrap: wrap; }
-.row > * { flex: 1 1 140px; }
-.cnt { float: right; font-size: 12px; color: var(--muted); }
-.cnt.over { color: var(--bad); font-weight: 700; }
-button { font: inherit; font-weight: 600; border: 0; border-radius: 12px; padding: 12px 16px; background: var(--card2);
-  color: var(--text); cursor: pointer; }
-button.primary { background: var(--accent); color: #1a1d24; }
-button.small { padding: 6px 10px; font-size: 14px; border-radius: 8px; }
-button:disabled { opacity: .45; cursor: default; }
-.btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
-.msg { margin-top: 10px; padding: 10px; border-radius: 10px; font-size: 15px; }
-.msg:empty { display: none; }
-.err { background: rgba(224,64,74,.15); border: 1px solid var(--bad); }
-.warn { background: rgba(240,160,32,.12); border: 1px solid var(--warn); }
-.good { background: rgba(25,179,107,.13); border: 1px solid var(--ok); }
-.sim { margin: 6px 0 0; padding-left: 18px; }
-.sim li { margin: 4px 0; }
-.sim small { color: var(--muted); }
-.pq { border-top: 1px solid var(--line); padding: 10px 0; }
-.pq:first-child { border-top: 0; }
-.pq b { display: block; }
-.pq .a { font-size: 14px; color: var(--muted); }
-.pq .a .y { color: var(--ok); }
-.tag { display: inline-block; font-size: 12px; background: var(--card2); border-radius: 6px; padding: 1px 6px; margin-right: 4px; color: var(--muted); }
-.steps { margin: 6px 0 0; padding-left: 20px; }
-.steps li { margin: 4px 0; }
-code { background: var(--card2); padding: 1px 5px; border-radius: 5px; }
-table { border-collapse: collapse; width: 100%; font-size: 14px; }
-td, th { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: left; }
-td.n { text-align: right; }
-details summary { cursor: pointer; color: var(--muted); }
+  :root { --bg:#0f172a; --card:#1e293b; --fg:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --ok:#22c55e; --err:#ef4444; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--fg); padding:24px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+  .card { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  label { display:block; font-size:.85rem; color:var(--muted); margin: 12px 0 6px; }
+  input[type=text], textarea, select { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #334155; background:#0b1220; color:var(--fg); font-size:.95rem; font-family: inherit; }
+  textarea { min-height: 80px; resize: vertical; font-family: monospace; }
+  .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width:600px){ .row { grid-template-columns: 1fr; } }
+  button { cursor:pointer; border:none; border-radius:8px; padding:10px 16px; font-size:.95rem; font-weight:600; transition: opacity 0.2s; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .primary { background: var(--accent); color:#0b1220; }
+  .ghost { background:#334155; color:var(--fg); }
+  .success { background: var(--ok); color: white; }
+  .actions { display:flex; gap:10px; margin-top:18px; flex-wrap: wrap; }
+  .msg { margin-top:14px; padding:10px 12px; border-radius:8px; font-size:.9rem; display:none; }
+  .msg.ok { background: rgba(34,197,94,.15); color:#86efac; display:block; }
+  .msg.err { background: rgba(239,68,68,.15); color:#fca5a5; display:block; }
+  .msg.info { background: rgba(56,189,248,.15); color:#7dd3fc; display:block; }
+  pre { background:#0b1220; padding:12px; border-radius:8px; overflow:auto; font-size:.8rem; max-height:320px; }
+  .hint { color:var(--muted); font-size:.8rem; margin-top:4px; }
+  .counter { float:right; color:var(--muted); font-size:.8rem; }
+  .ans-row { display:grid; grid-template-columns: 24px 1fr; gap:8px; align-items:center; margin-bottom:6px; }
+  .ans-row input[type=radio] { transform: scale(1.2); }
+  .badge { background: #334155; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; color: #cbd5e1; margin-left: 8px; }
 </style>
 </head>
 <body>
-<main>
-<h1>Кубик: добавление вопросов</h1>
-<p class="muted">Вопросы добавляются в общую базу игры. Форма собирает новый файл ru.json, его нужно загрузить на GitHub в папку игры вместо старого.</p>
+<div class="wrap">
+  <h1>Управление вопросами</h1>
+  <div class="sub">Загрузка базы, ручное добавление и массовый импорт из Telegram-бота.</div>
 
-<div class="card" id="base-card">
-  <h2>База вопросов</h2>
-  <div id="base-info" class="muted">Загружаю ru.json с сайта…</div>
-  <div class="btns">
-    <button class="small" id="b-reload">Загрузить с сайта заново</button>
-    <button class="small" id="b-file">Открыть ru.json с телефона/компьютера</button>
-    <input type="file" id="f-base" accept=".json,application/json" hidden>
+  <div class="card">
+    <div class="actions" style="margin-top:0;">
+      <button class="ghost" id="reloadBtn">🔄 Перезагрузить актуальный ru.json</button>
+      <button class="success" id="downloadCurrentBtn" disabled>💾 Просто скачать текущий ru.json</button>
+    </div>
+    <div class="msg info" id="statusMsg" style="display:block;">Ожидание загрузки файла...</div>
   </div>
-  <details style="margin-top:10px"><summary>Сколько вопросов в темах</summary><div id="base-table"></div></details>
-</div>
 
-<div class="card" id="add-card">
-  <h2>Новый вопрос</h2>
-  <div class="row">
-    <div><label for="f-topic">Тема</label><select id="f-topic"></select></div>
-    <div><label for="f-level">Уровень</label><select id="f-level">
-      <option value="1">1 — начальный</option><option value="2">2 — средний</option><option value="3">3 — высокий</option></select></div>
+  <!-- БЛОК МАССОВОГО ИМПОРТА ИЗ БОТА -->
+  <div class="card" style="border: 1px solid var(--accent);">
+    <h2 style="font-size: 1.1rem; margin-top: 0; color: var(--accent);">🤖 Массовый импорт из бота</h2>
+    <div class="sub">Скопируйте ответ бота (даже с
+
+    <div class="row">
+      <div>
+        <label>Тема</label>
+        <select id="batchTopic"></select>
+      </div>
+      <div>
+        <label>Уровень</label>
+        <select id="batchLevel">
+          <option value="1">1 — простой</option>
+          <option value="2">2 — средний</option>
+          <option value="3">3 — сложный</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Вставьте JSON от бота</label>
+    <textarea id="batchJson" placeholder='[ { "q": "Вопрос?", "a": ["Правильный", "Неверный 1", "Неверный 2", "Неверный 3"], "e": "Пояснение" } ]'></textarea>
+    
+    <div class="actions">
+      <button class="primary" id="importBtn" disabled>Импортировать и проверить дубликаты</button>
+    </div>
+<div class="msg" id="importMsg"></div>
+    <details id="importLog" style="display:none;">
+      <summary>Подробный лог импорта</summary>
+      <pre id="importLogText"></pre>
+    </details>
   </div>
-  <label for="f-q">Вопрос <span class="cnt" id="c-q"></span></label>
-  <textarea id="f-q" rows="3"></textarea>
-  <label for="f-a0">Верный ответ <span class="cnt" id="c-a0"></span></label>
-  <input type="text" id="f-a0" class="okans" autocomplete="off">
-  <label for="f-a1">Неверный ответ 1 <span class="cnt" id="c-a1"></span></label>
-  <input type="text" id="f-a1" autocomplete="off">
-  <label for="f-a2">Неверный ответ 2 <span class="cnt" id="c-a2"></span></label>
-  <input type="text" id="f-a2" autocomplete="off">
-  <label for="f-a3">Неверный ответ 3 <span class="cnt" id="c-a3"></span></label>
-  <input type="text" id="f-a3" autocomplete="off">
-  <label for="f-e">Пояснение после ответа, можно не писать <span class="cnt" id="c-e"></span></label>
-  <textarea id="f-e" rows="2"></textarea>
-  <div id="check" class="msg"></div>
-  <div class="btns">
-    <button class="primary" id="b-add">Добавить в список</button>
-    <button id="b-clear">Очистить поля</button>
-    <button id="b-cancel" hidden>Отменить правку</button>
+
+  <!-- БЛОК РУЧНОГО ДОБАВЛЕНИЯ -->
+  <div class="card">
+    <h2 style="font-size: 1.1rem; margin-top: 0;">✍️ Добавить один вопрос вручную</h2>
+    <div class="row">
+      <div>
+        <label>Тема</label>
+        <select id="topic"></select>
+      </div>
+      <div>
+        <label>Уровень сложности</label>
+        <select id="level">
+          <option value="1">1 — простой</option>
+          <option value="2">2 — средний</option>
+          <option value="3">3 — сложный</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Вопрос <span class="counter" id="qCounter">0/200</span></label>
+    <textarea id="question" maxlength="200" placeholder="Например: В каком городе стоит Эйфелева башня?" style="font-family: inherit;"></textarea>
+
+    <label>Варианты ответа (первый отмеченный — правильный)</label>
+    <div id="answers">
+      <div class="ans-row"><input type="radio" name="ans" value="0" checked><input type="text" class="ansInput" placeholder="Вариант 1 (правильный)" maxlength="80"></div>
+      <div class="ans-row"><input type="radio" name="ans" value="1"><input type="text" class="ansInput" placeholder="Вариант 2" maxlength="80"></div>
+      <div class="ans-row"><input type="radio" name="ans" value="2"><input type="text" class="ansInput" placeholder="Вариант 3" maxlength="80"></div>
+      <div class="ans-row"><input type="radio" name="ans" value="3"><input type="text" class="ansInput" placeholder="Вариант 4" maxlength="80"></div>
+    </div>
+    <div class="hint">Правильный вариант автоматически встанет первым в массиве.</div>
+
+    <label>Пояснение (необязательно)</label>
+    <textarea id="explain" placeholder="Короткое объяснение правильного ответа" style="font-family: inherit;"></textarea>
+
+    <div class="actions">
+      <button class="primary" id="saveBtn" disabled>Добавить вопрос и скачать ru.json</button>
+    </div>
+    <div class="msg" id="msg"></div>
   </div>
 </div>
-
-<div class="card">
-  <h2>Загрузить много вопросов из файла</h2>
-  <p class="muted" style="margin:0">Файл .txt в том же виде, что «Мои вопросы» в игре: вопрос, строка <code>+</code> верный ответ, три строки <code>-</code> неверные, <code>=</code> пояснение, <code>уровень: 2</code>. Вопросы разделяются пустой строкой. Все вопросы файла пойдут в выбранную выше тему. Уровень берётся из файла, а где его нет — выбранный выше.</p>
-  <div class="btns"><button id="b-txt">Выбрать файл .txt</button><input type="file" id="f-txt" accept=".txt,text/plain" hidden></div>
-  <div id="txt-msg" class="msg"></div>
-</div>
-
-<div class="card">
-  <h2>Новые вопросы: <span id="p-n">0</span></h2>
-  <p class="muted" style="margin:0 0 6px">Список хранится в этом браузере, пока ты не загрузишь новый ru.json на GitHub. Потом форма сама увидит их на сайте и очистит список.</p>
-  <div id="pending"></div>
-  <div class="btns">
-    <button class="primary" id="b-save">Скачать новый ru.json</button>
-    <button id="b-share" hidden>Поделиться файлом</button>
-    <button id="b-drop">Очистить список</button>
-  </div>
-  <div id="save-msg" class="msg"></div>
-</div>
-
-<div class="card">
-  <h2>Как загрузить на GitHub</h2>
-  <ol class="steps">
-    <li>Нажми «Скачать новый ru.json».</li>
-    <li>Открой на GitHub свой репозиторий, папку <code>kubik3</code>.</li>
-    <li>«Add file» → «Upload files», перетащи или выбери скачанный ru.json. Имя должно быть ровно <code>ru.json</code>, без «(1)» в конце.</li>
-    <li>Внизу «Commit changes».</li>
-    <li>Через 1–2 минуты в игре: меню → «Обновить вопросы».</li>
-  </ol>
-  <p class="muted">Если добавил вопросы, но ещё не загрузил файл, а потом добавляешь новые — ничего страшного: список копится, следующий скачанный ru.json будет содержать все.</p>
-</div>
-</main>
 
 <script>
-'use strict';
-// Ограничения те же, что проверяет сборка игры (tools/merge_q.py): длинные строки не помещаются в кнопки.
-const LIM = { q: 160, a: 40, e: 400 };
-const NAMES = { history: 'История', geography: 'География', literature: 'Литература', music: 'Музыка', science: 'Наука',
-  painting: 'Живопись', people: 'Личности', cinema: 'Кино', journalism: 'Журналистика', logic: 'Логика и головоломки',
-  sport: 'Спорт', cooking: 'Кулинария', architecture: 'Архитектура', quotes: 'Киноцитаты и кадры', cartoons: 'Мультфильмы',
-  games: 'Компьютерные игры', belarus: 'История Беларуси', etymology: 'Происхождение слов', inventions: 'История изобретений',
-  computers: 'Компьютеры' };
-const KEY_P = 'kubikForma.pending.v1', KEY_T = 'kubikForma.last.v1', KEY_R = 'kubikForma.rev.v1';
-const $ = (s) => document.querySelector(s);
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
-// ключ для точного совпадения: без регистра, ё=е, без знаков препинания
-const key = (s) => norm(s).toLowerCase().replace(/ё/g, 'е').replace(/[^0-9a-zа-я]+/gi, ' ').trim();
-const STOP = new Set('как какой какая какое какие каком какую кто что чем чего где когда куда откуда сколько который которая которое которые это этот эта эти был была было были для при над под про без или его она они оно него неё всех все так также том тем того этом этой году года лет между после перед через ещё уже'.split(' '));
-function stems(s) {
-  const out = new Set();
-  for (const w of key(s).split(' ')) {
-    if (w.length < 3 || STOP.has(w)) continue;
-    out.add(/^\d+$/.test(w) ? w : w.slice(0, 5));
-  }
-  return out;
+const FILE_URL = './ru.json';
+let currentData = null;
+let isDataLoaded = false;
+
+const $ = id => document.getElementById(id);
+const ansInputs = [...document.querySelectorAll('.ansInput')];
+
+function showMsg(id, text, type='info') {
+  const el = $(id);
+  el.className = 'msg ' + type;
+  el.textContent = text;
+  if(type === 'info' && text === '') el.style.display = 'none';
 }
-const plural = (n, a, b, c) => { const m = n % 100, k = n % 10; return m > 10 && m < 20 ? c : k === 1 ? a : k > 1 && k < 5 ? b : c; };
 
-let BASE = null, SRC = '', INDEX = [];
-let P = loadPending(), EDIT = -1;
+function norm(s) {
+  return (s || '').toString().trim().toLowerCase().replace(/\s+/g, ' ').replace(/[?!.,;:]+$/,'');
+}
 
-function loadPending() { try { return JSON.parse(localStorage.getItem(KEY_P)) || []; } catch { return []; } }
-function savePending() { try { localStorage.setItem(KEY_P, JSON.stringify(P)); } catch { /* полная память */ } }
-const topicName = (t) => (BASE && BASE._meta && BASE._meta.topics && BASE._meta.topics[t] && BASE._meta.topics[t].name) || NAMES[t] || t;
-const topicsOf = (b) => Object.keys(b).filter((t) => t !== '_meta' && b[t] && Array.isArray(b[t]['1']));
-
-function okBase(b) { return b && typeof b === 'object' && b._meta && topicsOf(b).length > 0; }
-
-async function loadSite() {
-  $('#base-info').textContent = 'Загружаю ru.json с сайта…';
+// --- ЗАГРУЗКА ДАННЫХ ---
+async function loadData() {
   try {
-    const r = await fetch('../ru.json?fresh=' + Date.now(), { cache: 'no-store' });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const b = await r.json();
-    if (!okBase(b)) throw new Error('не похоже на базу вопросов');
-    setBase(b, 'сайт');
-  } catch (e) {
-    $('#base-info').innerHTML = `<span style="color:var(--bad)">Не получилось загрузить ru.json с сайта (${esc(e.message)}).</span> Форма должна лежать в папке <code>forma</code> внутри папки игры. Можно открыть ru.json из файла кнопкой ниже.`;
-  }
-}
+    const res = await fetch(FILE_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    currentData = await res.json();
+    isDataLoaded = true;
 
-function setBase(b, src) {
-  BASE = b; SRC = src;
-  INDEX = [];
-  for (const t of topicsOf(b)) for (const l of ['1', '2', '3']) for (const q of b[t][l] || []) {
-    INDEX.push({ t, l, q: q.q, a0: q.a[0], k: key(q.q), ka: key(q.a[0]), s: stems(q.q), p: !!q.p });
-  }
-  // вопросы из списка, которые уже есть в базе (файл загружен на GitHub), убираются из списка
-  const before = P.length;
-  P = P.filter((x) => !INDEX.some((y) => y.t === x.t && y.l === String(x.l) && y.k === key(x.q) && y.ka === key(x.a[0])));
-  const gone = before - P.length;
-  savePending();
-  const m = b._meta;
-  const d = (m.date || '').split('-').reverse().join('.');
-  $('#base-info').innerHTML = `Загружено (${src === 'сайт' ? 'с сайта' : 'из файла'}): <b>${INDEX.length}</b> ${plural(INDEX.length, 'вопрос', 'вопроса', 'вопросов')}, версия базы <b>${+m.rev || 0}</b>${d ? ' от ' + d : ''}.`
-    + (gone ? `<div class="msg good">${gone} ${plural(gone, 'вопрос из списка уже есть', 'вопроса из списка уже есть', 'вопросов из списка уже есть')} в этой базе, убрал ${gone > 1 ? 'их' : 'его'} из списка.</div>` : '');
-  fillTopics();
-  renderTable();
-  renderPending();
-  runCheck();
-}
+    const topics = Object.keys(currentData).filter(k => k !== '_meta');
+    
+    // Заполняем селекты тем
+    [$('topic'), $('batchTopic')].forEach(sel => {
+      sel.innerHTML = '';
+      topics.forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = k;
+        sel.appendChild(opt);
+      });
+    });
 
-function countIn(t, l) {
-  const inBase = BASE && BASE[t] && BASE[t][l] ? BASE[t][l].length : 0;
-  return inBase + P.filter((x) => x.t === t && String(x.l) === String(l)).length;
-}
-function fillTopics() {
-  const sel = $('#f-topic'), cur = sel.value || (JSON.parse(localStorage.getItem(KEY_T) || '{}').t);
-  sel.innerHTML = topicsOf(BASE).sort((a, b) => topicName(a).localeCompare(topicName(b), 'ru'))
-    .map((t) => `<option value="${esc(t)}">${esc(topicName(t))}</option>`).join('');
-  if (cur && BASE[cur]) sel.value = cur;
-  const lv = JSON.parse(localStorage.getItem(KEY_T) || '{}').l;
-  if (lv && !$('#f-level').dataset.touched) $('#f-level').value = lv;
-}
-function renderTable() {
-  const rows = topicsOf(BASE).sort((a, b) => topicName(a).localeCompare(topicName(b), 'ru')).map((t) =>
-    `<tr><td>${esc(topicName(t))}</td>${['1', '2', '3'].map((l) => `<td class="n">${countIn(t, l)}</td>`).join('')}</tr>`).join('');
-  $('#base-table').innerHTML = `<table><tr><th>Тема</th><th class="n">Ур. 1</th><th class="n">Ур. 2</th><th class="n">Ур. 3</th></tr>${rows}</table>`;
-}
-
-function readForm() {
-  return { t: $('#f-topic').value, l: +$('#f-level').value, q: norm($('#f-q').value),
-    a: [0, 1, 2, 3].map((i) => norm($('#f-a' + i).value)), e: norm($('#f-e').value) };
-}
-
-// Возвращает { errors, warns, similar }
-function checkQ(x, skip) {
-  const errors = [], warns = [];
-  if (!x.q) errors.push('Напиши сам вопрос.');
-  if (x.q.length > LIM.q) errors.push(`Вопрос длиннее ${LIM.q} знаков (сейчас ${x.q.length}). На экране телефона он не поместится.`);
-  if (!x.a[0]) errors.push('Нужен верный ответ.');
-  if (x.a.slice(1).some((s) => !s)) errors.push('Нужны три неверных ответа.');
-  x.a.forEach((s, i) => { if (s.length > LIM.a) errors.push(`${i ? 'Неверный ответ ' + i : 'Верный ответ'} длиннее ${LIM.a} знаков.`); });
-  if (x.a.every(Boolean) && new Set(x.a.map(key)).size !== 4) errors.push('Все четыре ответа должны быть разными.');
-  if (x.e.length > LIM.e) errors.push(`Пояснение длиннее ${LIM.e} знаков.`);
-  if (x.q && x.a[0] && key(x.q).includes(key(x.a[0])) && key(x.a[0]).length > 3) warns.push('Верный ответ написан прямо в тексте вопроса.');
-  const similar = [];
-  if (x.q && BASE) {
-    const k = key(x.q), ka = key(x.a[0]), s = stems(x.q);
-    const pool = INDEX.map((y) => ({ ...y, from: 'база' }))
-      .concat(P.map((y, i) => ({ t: y.t, l: String(y.l), q: y.q, a0: y.a[0], k: key(y.q), ka: key(y.a[0]), s: stems(y.q), i, from: 'список' })).filter((y) => y.i !== skip));
-    for (const y of pool) {
-      if (y.k === k) {
-        if (y.ka === ka || !ka) { errors.push(`Такой вопрос уже есть (${y.from === 'база' ? 'в базе' : 'в твоём списке'}): «${topicName(y.t)}», уровень ${y.l}, ответ «${y.a0}».`); continue; }
-        if (y.p) continue; // вопросы к картинкам с одинаковым текстом («Кто написал эту картину?»)
-        similar.push({ ...y, score: 2 }); continue;
+    let total = 0;
+    for (const k of topics) {
+      for (const l of Object.keys(currentData[k])) {
+        if (Array.isArray(currentData[k][l])) total += currentData[k][l].length;
       }
-      let inter = 0; for (const w of s) if (y.s.has(w)) inter++;
-      const dice = s.size && y.s.size ? (2 * inter) / (s.size + y.s.size) : 0;
-      const score = dice + (ka && y.ka === ka ? 0.3 : 0);
-      if ((inter >= 3 && score >= 0.5) || (inter >= 2 && score >= 0.75)) similar.push({ ...y, score });
-      else if (ka && y.ka === ka && ka.length > 2 && y.t === x.t) similar.push({ ...y, score: 0.3 + dice });
     }
-    similar.sort((a, b) => b.score - a.score);
+    
+    showMsg('statusMsg', '✅ База загружена: ' + total + ' вопросов.', 'ok');
+    $('saveBtn').disabled = false;
+    $('importBtn').disabled = false;
+    $('downloadCurrentBtn').disabled = false;
+  } catch (e) {
+    currentData = null;
+    isDataLoaded = false;
+    showMsg('statusMsg', '❌ Ошибка загрузки ru.json: ' + e.message, 'err');
+    $('saveBtn').disabled = true;
+    $('importBtn').disabled = true;
   }
-  return { errors: [...new Set(errors)], warns, similar: similar.slice(0, 6) };
 }
 
-function runCheck() {
-  for (const [id, lim] of [['q', LIM.q], ['a0', LIM.a], ['a1', LIM.a], ['a2', LIM.a], ['a3', LIM.a], ['e', LIM.e]]) {
-    const n = norm($('#f-' + id).value).length, c = $('#c-' + id);
-    c.textContent = n ? `${n}/${lim}` : ''; c.classList.toggle('over', n > lim);
+// --- ПОИСК ДУБЛИКАТОВ ---
+function findDuplicates(qText) {
+  if (!currentData) return [];
+  const n = norm(qText);
+  const found = [];
+  for (const k of Object.keys(currentData)) {
+    if (k === '_meta') continue;
+for (const l of Object.keys(currentData[k])) {
+      const arr = currentData[k][l];
+      if (!Array.isArray(arr)) continue;
+      for (const item of arr) {
+        if (item && norm(item.q) === n) found.push({ topic: k, level: l, q: item.q });
+      }
+    }
   }
-  const x = readForm(), box = $('#check');
-  const filled = x.q || x.a.some(Boolean);
-  if (!filled || !BASE) { box.className = 'msg'; box.innerHTML = ''; $('#b-add').disabled = !BASE; return; }
-  const r = checkQ(x, EDIT);
-  const parts = [];
-  if (r.errors.length) parts.push(`<b>Нужно исправить:</b><ul class="sim">${r.errors.map((e) => `<li>${esc(e)}</li>`).join('')}</ul>`);
-  if (r.warns.length) parts.push(`<b>Обрати внимание:</b><ul class="sim">${r.warns.map((e) => `<li>${esc(e)}</li>`).join('')}</ul>`);
-  if (r.similar.length) parts.push(`<b>Похожие вопросы, проверь, не повтор ли:</b><ul class="sim">${r.similar.map((y) =>
-    `<li>${esc(y.q)}<br><small>${esc(topicName(y.t))}, ур. ${y.l}, ответ «${esc(y.a0)}»${y.from === 'список' ? ', в твоём списке' : ''}</small></li>`).join('')}</ul>`);
-  if (!parts.length) parts.push('Повторов в базе нет, всё заполнено правильно.');
-  box.className = 'msg ' + (r.errors.length ? 'err' : r.warns.length || r.similar.length ? 'warn' : 'good');
-  box.innerHTML = parts.join('');
-  $('#b-add').disabled = false;
+  return found;
 }
 
-function clearForm() {
-  for (const id of ['q', 'a0', 'a1', 'a2', 'a3', 'e']) $('#f-' + id).value = '';
-  EDIT = -1; $('#b-add').textContent = 'Добавить в список'; $('#b-cancel').hidden = true;
-  runCheck();
-}
-
-function addQ() {
-  const x = readForm(), r = checkQ(x, EDIT);
-  if (r.errors.length) { runCheck(); $('#check').scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
-  const item = { t: x.t, l: x.l, q: x.q, a: x.a, e: x.e };
-  if (EDIT >= 0) P[EDIT] = item; else P.push(item);
-  savePending();
-  localStorage.setItem(KEY_T, JSON.stringify({ t: x.t, l: x.l }));
-  const msg = EDIT >= 0 ? 'Исправлено.' : `Добавлено. В списке ${P.length}.`;
-  clearForm();
-  renderPending(); renderTable();
-  const box = $('#check'); box.className = 'msg good'; box.textContent = msg;
-  $('#f-q').focus();
-}
-
-function renderPending() {
-  $('#p-n').textContent = P.length;
-  $('#b-save').disabled = !P.length || !BASE;
-  $('#b-share').hidden = !(navigator.canShare && P.length && BASE);
-  $('#pending').innerHTML = P.length ? P.map((x, i) => `<div class="pq"><span class="tag">${esc(topicName(x.t))}</span><span class="tag">ур. ${x.l}</span>
-    <b>${esc(x.q)}</b><div class="a"><span class="y">${esc(x.a[0])}</span> · ${x.a.slice(1).map(esc).join(' · ')}</div>
-    ${x.e ? `<div class="a">${esc(x.e)}</div>` : ''}
-    <div class="btns" style="margin-top:6px"><button class="small" data-ed="${i}">Изменить</button><button class="small" data-del="${i}">Удалить</button></div></div>`).join('')
-    : '<p class="muted">Пока пусто.</p>';
-}
-
-function editQ(i) {
-  const x = P[i]; EDIT = i;
-  $('#f-topic').value = x.t; $('#f-level').value = x.l; $('#f-q').value = x.q; $('#f-e').value = x.e || '';
-  x.a.forEach((s, j) => { $('#f-a' + j).value = s; });
-  $('#b-add').textContent = 'Сохранить правку'; $('#b-cancel').hidden = false;
-  runCheck();
-  $('#add-card').scrollIntoView({ behavior: 'smooth' });
-}
-
-function buildBank() {
-  const nb = JSON.parse(JSON.stringify(BASE));
-  for (const x of P) {
-    nb[x.t] = nb[x.t] || { 1: [], 2: [], 3: [] };
-    const L = String(x.l);
-    nb[x.t][L] = nb[x.t][L] || [];
-    const it = { q: x.q, a: x.a.slice(), e: x.e || '' };
-    nb[x.t][L].push(it); // только в конец: игра помнит «уже были» по номерам вопросов
+// --- ОБНОВЛЕНИЕ МЕТАДАННЫХ ---
+function updateMeta() {
+  if (currentData._meta) {
+    let total = 0;
+    for (const k of Object.keys(currentData)) {
+      if (k === '_meta') continue;
+      for (const l of Object.keys(currentData[k])) {
+        if (Array.isArray(currentData[k][l])) total += currentData[k][l].length;
+      }
+    }
+    currentData._meta.n = total;
+    currentData._meta.date = new Date().toISOString().slice(0,10);
   }
-  const m = nb._meta;
-  // номер версии всегда больше прошлого скачанного: если прошлый файл уже на сайте, а база здесь ещё старая,
-  // у игроков «Обновить вопросы» всё равно сработает
-  m.rev = Math.max(+m.rev || 0, +localStorage.getItem(KEY_R) || 0) + 1;
-  m.date = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-  m.n = topicsOf(nb).reduce((n, t) => n + ['1', '2', '3'].reduce((k, l) => k + (nb[t][l] || []).length, 0), 0);
-  m.by = (m.by || 0) + P.length; // сколько вопросов добавлено через форму (для Тоби)
-  return nb;
 }
-function bankFile() {
-  const nb = buildBank();
-  return { nb, file: new File([JSON.stringify(nb)], 'ru.json', { type: 'application/json' }) };
-}
-function saveMsg(nb) {
-  try { localStorage.setItem(KEY_R, nb._meta.rev); } catch { /* */ }
-  $('#save-msg').className = 'msg good';
-  $('#save-msg').innerHTML = `Готово: ${nb._meta.n} ${plural(nb._meta.n, 'вопрос', 'вопроса', 'вопросов')}, версия базы ${nb._meta.rev}. Теперь загрузи этот ru.json на GitHub в папку игры вместо старого. Список здесь очистится сам, когда форма увидит эти вопросы на сайте.`;
-}
-function download() {
-  const { nb, file } = bankFile();
+
+// --- СКАЧИВАНИЕ ---
+function downloadJson() {
+  const json = JSON.stringify(currentData, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(file); a.download = 'ru.json';
-  document.body.appendChild(a); a.click();
-  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 3000);
-  saveMsg(nb);
-}
-async function share() {
-  const { nb, file } = bankFile();
-  try { await navigator.share({ files: [file], title: 'ru.json' }); saveMsg(nb); }
-  catch (e) { if (e.name !== 'AbortError') download(); }
+  a.href = url;
+  a.download = 'ru.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
-// ---- файл .txt как «Мои вопросы» ----
-function parseTxt(text) {
-  text = String(text).replace(/^﻿/, '').replace(/\r\n?/g, '\n');
-  const items = [], errors = [];
-  const blocks = text.split(/\n\s*\n/).map((b) => b.split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'))).filter((b) => b.length);
-  blocks.forEach((lines, n) => {
-    const q = { q: [], ok: [], bad: [], e: [], lv: 0 };
-    for (const l of lines) {
-      const m = l.match(/^уровень\s*[:\-–—]?\s*(\S+)/i);
-      if (m) { q.lv = [1, 2, 3].includes(+m[1]) ? +m[1] : 0; continue; }
-      if (l[0] === '+') q.ok.push(l.slice(1));
-      else if ('-–—'.includes(l[0])) q.bad.push(l.slice(1));
-      else if (l[0] === '=') q.e.push(l.slice(1));
-      else if (!q.ok.length && !q.bad.length) q.q.push(l);
-      else q.e.push(l);
+// --- МАССОВЫЙ ИМПОРТ ИЗ БОТА ---
+$('importBtn').addEventListener('click', () => {
+  if (!isDataLoaded) return;
+  const rawText = $('batchJson').value.trim();
+  if (!rawText) return showMsg('importMsg', 'Вставьте JSON от бота', 'err');
+
+  // Очистка от markdown-тегов ```json ... 
+  let cleanText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+  
+  let parsedQuestions = [];
+  try {
+    const parsed = JSON.parse(cleanText);
+    // Проверяем, массив это или объект
+    if (Array.isArray(parsed)) {
+      parsedQuestions = parsed;
+    } else if (parsed.questions && Array.isArray(parsed.questions)) {
+      parsedQuestions = parsed.questions;
+    } else {
+      // Если это один объект вопроса
+      if (parsed.q && parsed.a) parsedQuestions = [parsed];
+      else throw new Error('Неизвестная структура JSON');
     }
-    const name = norm(q.q.join(' ')).slice(0, 50) || `блок ${n + 1}`;
-    if (q.ok.length !== 1) { errors.push(`«${name}»: нужен ровно один верный ответ (строка с +).`); return; }
-    if (q.bad.length !== 3) { errors.push(`«${name}»: нужны ровно три неверных ответа (строки с -), а их ${q.bad.length}.`); return; }
-    items.push({ q: norm(q.q.join(' ')), a: [q.ok[0], ...q.bad].map(norm), e: norm(q.e.join(' ')), lv: q.lv });
-  });
-  return { items, errors };
-}
-async function importTxt(f) {
-  const text = await f.text();
-  const { items, errors } = parseTxt(text);
-  const t = $('#f-topic').value, defL = +$('#f-level').value;
-  let added = 0; const errs = errors.slice(), sims = [];
-  for (const it of items) {
-    const x = { t, l: it.lv || defL, q: it.q, a: it.a, e: it.e };
-    const r = checkQ(x, -1);
-    if (r.errors.length) { errs.push(`«${x.q.slice(0, 50)}»: ${r.errors[0]}`); continue; }
-    if (r.similar.length && r.similar[0].score >= 0.75) sims.push(`«${x.q.slice(0, 60)}» похож на «${r.similar[0].q.slice(0, 60)}» (${topicName(r.similar[0].t)}, ур. ${r.similar[0].l})`);
-    P.push(x); added++;
+  } catch (e) {
+    return showMsg('importMsg', '❌ Ошибка парсинга JSON: ' + e.message, 'err');
   }
-  savePending(); renderPending(); renderTable();
-  const box = $('#txt-msg');
-  box.className = 'msg ' + (errs.length ? 'warn' : 'good');
-  box.innerHTML = `Добавлено в список: <b>${added}</b> в тему «${esc(topicName(t))}».`
-    + (errs.length ? `<br>Не добавлены (${errs.length}):<ul class="sim">${errs.slice(0, 30).map((e) => `<li>${esc(e)}</li>`).join('')}${errs.length > 30 ? `<li>и ещё ${errs.length - 30}</li>` : ''}</ul>` : '')
-    + (sims.length ? `<br>Добавлены, но очень похожи на имеющиеся, проверь в списке:<ul class="sim">${sims.slice(0, 30).map((e) => `<li>${esc(e)}</li>`).join('')}</ul>` : '');
+
+  const topic = $('batchTopic').value;
+  const level = $('batchLevel').value;
+  const log = [];
+  let addedCount = 0;
+  let skippedCount = 0;
+
+  if (!currentData[topic]) currentData[topic] = {};
+  if (!Array.isArray(currentData[topic][level])) currentData[topic][level] = [];
+
+  parsedQuestions.forEach((item, idx) => {
+    if (!item.q  !item.a  !Array.isArray(item.a)) {
+      log.push(`[${idx+1}] Пропущен: нет поля q или a`);
+      skippedCount++;
+      return;
+    }
+
+    // Проверка на дубликаты по всей базе
+    const dups = findDuplicates(item.q);
+    if (dups.length > 0) {
+      log.push(`[${idx+1}] Дубликат: "${item.q}" (уже есть в ${dups[0].topic}/${dups[0].level})`);
+      skippedCount++;
+    } else {
+      // Создаем чистый объект (без лишних полей)
+      const newObj = { q: item.q.trim(), a: item.a };
+      if (item.e) newObj.e = item.e.trim();
+      
+      currentData[topic][level].push(newObj);
+      log.push(`[${idx+1}] ✅ Добавлен: "${item.q}"`);
+      addedCount++;
+    }
+  });
+
+  if (addedCount > 0) {
+    updateMeta();
+    $('importMsg').className = 'msg ok';
+    $('importMsg').textContent = ✅ Импорт завершен. Добавлено: ${addedCount}. Пропущено (дубликаты/ошибки): ${skippedCount}.;
+    downloadJson(); // Автоматически скачиваем
+  } else {
+    showMsg('importMsg', ⚠️ Ничего не добавлено. Пропущено: ${skippedCount}., 'info');
+  }
+
+  $('importLogText').textContent = log.join('\n');
+  $('importLog').style.display = 'block';
+  $('batchJson').value = ''; // Очищаем поле
+});
+
+// --- РУЧНОЕ ДОБАВЛЕНИЕ ---
+function buildQuestion() {
+  const q = $('question').value.trim();
+  if (!q) throw new Error('Введите вопрос');
+
+  const variants = ansInputs.map(i => i.value.trim()).filter(v => v);
+  if (variants.length < 2) throw new Error('Нужно минимум 2 варианта ответа');
+
+  const correctIdx = Number(document.querySelector('input[name="ans"]:checked').value);
+  const correct = ansInputs[correctIdx].value.trim();
+  if (!correct) throw new Error('Отмеченный правильный вариант не заполнен');
+
+  const a = [correct, ...variants.
+filter(v => v !== correct)];
+  const obj = { q, a };
+  const e = $('explain').value.trim();
+  if (e) obj.e = e;
+  return obj;
 }
 
-// ---- события ----
-for (const id of ['q', 'a0', 'a1', 'a2', 'a3', 'e']) $('#f-' + id).addEventListener('input', runCheck);
-$('#f-topic').addEventListener('change', runCheck);
-$('#f-level').addEventListener('change', () => { $('#f-level').dataset.touched = 1; runCheck(); });
-$('#b-add').onclick = addQ;
-$('#b-clear').onclick = clearForm;
-$('#b-cancel').onclick = clearForm;
-$('#b-save').onclick = download;
-$('#b-share').onclick = share;
-$('#b-drop').onclick = () => { if (P.length && confirm(`Удалить из списка все ${P.length} ${plural(P.length, 'вопрос', 'вопроса', 'вопросов')}?`)) { P = []; savePending(); renderPending(); renderTable(); } };
-$('#pending').onclick = (ev) => {
-  const b = ev.target.closest('button'); if (!b) return;
-  if (b.dataset.ed) editQ(+b.dataset.ed);
-  if (b.dataset.del && confirm('Удалить этот вопрос из списка?')) { P.splice(+b.dataset.del, 1); if (EDIT === +b.dataset.del) clearForm(); savePending(); renderPending(); renderTable(); }
-};
-$('#b-reload').onclick = loadSite;
-$('#b-file').onclick = () => $('#f-base').click();
-$('#f-base').onchange = async (ev) => {
-  const f = ev.target.files[0]; ev.target.value = ''; if (!f) return;
-  try { const b = JSON.parse(await f.text()); if (!okBase(b)) throw 0; setBase(b, 'файл'); }
-  catch { alert('Это не файл с вопросами игры (ru.json).'); }
-};
-$('#b-txt').onclick = () => { if (!BASE) { alert('Сначала должна загрузиться база.'); return; } $('#f-txt').click(); };
-$('#f-txt').onchange = async (ev) => { const f = ev.target.files[0]; ev.target.value = ''; if (f) importTxt(f); };
+$('saveBtn').addEventListener('click', () => {
+  if (!currentData) return showMsg('msg', 'База не загружена', 'err');
+  try {
+    const obj = buildQuestion();
+    const dups = findDuplicates(obj.q);
+    if (dups.length) {
+      const ok = confirm('Похожий вопрос уже есть:\n' + dups[0].q + '\n\nВсё равно добавить?');
+      if (!ok) return;
+    }
 
-renderPending();
-loadSite();
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && SRC === 'сайт') loadSite(); });
+    const topic = $('topic').value;
+    const level = $('level').value;
+
+    if (!currentData[topic]) currentData[topic] = {};
+    if (!Array.isArray(currentData[topic][level])) currentData[topic][level] = [];
+    currentData[topic][level].push(obj);
+
+    updateMeta();
+    downloadJson();
+
+    showMsg('msg', 'Вопрос добавлен. Файл ru.json скачан.', 'ok');
+    $('question').value = '';
+    ansInputs.forEach(i => i.value = '');
+    $('explain').value = '';
+    $('qCounter').textContent = '0/200';
+    document.querySelector('input[name="ans"][value="0"]').checked = true;
+  } catch (e) {
+    showMsg('msg', e.message, 'err');
+  }
+});
+
+$('question').addEventListener('input', e => $('qCounter').textContent = e.target.value.length + '/200');
+$('reloadBtn').addEventListener('click', loadData);
+$('downloadCurrentBtn').addEventListener('click', () => { if(currentData) downloadJson(); });
+
+loadData();
 </script>
 </body>
 </html>
